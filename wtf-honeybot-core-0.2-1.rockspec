@@ -1,8 +1,8 @@
 package = "wtf-honeybot-core"
-version = "0.1-1"
+version = "0.2-1"
 source = {
    url = "git+https://github.com/honeybot/wtf-honeybot-core",
-   tag = "0.1"
+   tag = "0.2"
 }
 description = {
    homepage = "https://github.com/honeybot/wtf-honeybot-core",
