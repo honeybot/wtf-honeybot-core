@@ -53,7 +53,7 @@ function _M:log(...)
 
   for _, note in self:get_notes() do
     obj = cjson.decode(note)
-    if self:check_condition(obj) then
+    if not self:check_condition(obj) then
       action:act(obj)
     end
   end
