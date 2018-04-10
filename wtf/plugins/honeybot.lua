@@ -26,20 +26,21 @@ function _M:log(...)
     data["date"] = os.time(os.date("!*t"))
     data["method"] = ngx.var.request_method
     data["headers"] = ngx.req.get_headers()
-    data["get"] = ngx.ctx.get
-    data["post"] = ngx.ctx.post
+    data["get"] = ngx.ctx.get or {}
+    data["post"] = ngx.ctx.post or {}
     data["files"] = {}
-    ngx.log(ngx.ERR,inspect(ngx.ctx.files))
-    for key,val in pairs(ngx.ctx.files) do
-        local f=io.open(val["temp"],"rb")
-        local content=f:read("*a")
-        local hash=md5.new()
-        hash:update(content)
-        data["files"][key]=val
-        data["files"][key]["md5"]=str.to_hex(hash:digest())
-        data["files"][key]["content"]=string.sub(content,1,1024)
-        ngx.log(ngx.ERR,inspect(data["files"]))
-    end
+	if ngx.ctx.files then
+        for key,val in pairs(ngx.ctx.files) do
+            local f=io.open(val["temp"],"rb")
+            local content=f:read("*a")
+            local hash=md5.new()
+            hash:update(content)
+            data["files"][key]=val
+            data["files"][key]["md5"]=str.to_hex(hash:digest())
+            data["files"][key]["content"]=string.sub(content,1,1024)
+            ngx.log(ngx.ERR,inspect(data["files"]))
+        end
+	end
     instance:note(cjson.encode(data))
 
 	return self
